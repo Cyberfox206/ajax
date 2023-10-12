@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="/vite.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="meteo_Eden">
+  <!-- <link rel="stylesheet" href="style.css"> -->
+  <title>meteo_Eden</title>
+</head>
+
+<body>
+  <main>
+    <h1>simple weather app</h1>
+    <form onsubmit="soumission(event)" id="form">
+      <input id="nom" name="submitted-city" autocomplete="off" placeholder="search for a city">
+      <button id="button" type="submit">submit</button>
+    </form>
+    <div id="erreur_message"></div>
+    <section id="card">
+
+    </section>
+  </main>
+  <script>
+    function soumission(event) {
+      event.preventDefault();
+      nom = document.getElementById("nom").value;
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function (data) {
+        if (data.target.readyState == 4 && data.target.status == 200) {
+          var res = JSON.parse(data.target.response);
+          console.log(res);
+          document.getElementById('card').innerHTML += `<div id="${res.name}" class="city_card">
+                                            
+                                            <p class="p_city_name">${res.name}<span class="sys_country">${res.sys.country}</span>
+                                            <p class="temperature">${parseInt(res.main.temp)}<span>°C</span></p>
+                                            <img class="img_card" src="https://openweathermap.org/img/wn/${res.weather[0].icon}@4x.png" alt="image_meteo">
+                                            <p class="description">${res.weather[0].description}</p>
+                                            </div>`
+        }
+      };
+      xhttp.open("GET", `https://api.openweathermap.org/data/2.5/weather?q=${nom}&appid=9ef4afffafebcdcd62823eb8eb0f1adf&units=metric`, true);
+      xhttp.send();
+    }
+  </script>
+</body>
+
+</html>
