@@ -31,19 +31,23 @@
         if (data.target.readyState == 4 && data.target.status == 200) {
           var res = JSON.parse(data.target.response);
           console.log(res);
-          document.getElementById('card').innerHTML += `<div id="${res.name}" class="city_card">
-                                            
-                                            <p class="p_city_name">${res.name}<span class="sys_country">${res.sys.country}</span>
-                                            <p class="temperature">${parseInt(res.main.temp)}<span>°C</span></p>
-                                            <img class="img_card" src="https://openweathermap.org/img/wn/${res.weather[0].icon}@4x.png" alt="image_meteo">
-                                            <p class="description">${res.weather[0].description}</p>
-                                            </div>`
+          for (let i = 0; i < res.list.length; i++) {
+            document.getElementById('card').innerHTML += `
+              <div>                 
+                <p>${res.city.name}</p>
+                <p>${res.list[i].dt_txt}</p>
+                <p>${(res.list[i].main.temp)}<span>°C</span></p>
+                <img src="https://openweathermap.org/img/wn/${res.list[i].weather[0].icon}@4x.png" alt="image_meteo">
+                <p>${res.list[i].weather[0].description}</p>
+                </div>
+                `
+              }
+            }
+          };  
+          xhttp.open("GET", `https://api.openweathermap.org/data/2.5/forecast?q=${nom}&APPID=0eee845fbfb08dcc0204fcb70613dc4a&units=metric`, true);
+          xhttp.send();
         }
-      };
-      xhttp.open("GET", `https://api.openweathermap.org/data/2.5/weather?q=${nom}&appid=9ef4afffafebcdcd62823eb8eb0f1adf&units=metric`, true);
-      xhttp.send();
-    }
-  </script>
+        </script>
 </body>
 
 </html>
